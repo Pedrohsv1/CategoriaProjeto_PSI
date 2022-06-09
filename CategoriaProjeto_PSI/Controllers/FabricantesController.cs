@@ -81,5 +81,29 @@ namespace CategoriaProjeto_PSI.Controllers
             return View(fabricante);
         }
 
+        // GET: Fabricantes/Delete/5
+        public ActionResult Delete(long? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Fabricante fabricante = fabricantes.Where(m => m.FabricanteId == id).First();
+            if (fabricante == null)
+            {
+                return HttpNotFound();
+            }
+            return View(fabricante);
+        }
+
+        // POST: Fabricantes/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(long id)
+        {
+            Fabricante fabricante = fabricantes.Where(c => c.FabricanteId == id).First();
+            fabricantes.Remove(fabricante);
+            return RedirectToAction("Index");
+        }
     }
 }
