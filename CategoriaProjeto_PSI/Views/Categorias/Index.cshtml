@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<CategoriaProjeto_PSI.Models.Categoria>
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -10,38 +10,6 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville&display=swap" rel="stylesheet">
-    <style>
-    body { font-family: 'Bebas Neue'; }
-        th {
-            font-family: 'Bebas Neue';
-            font-size: 20px;
-        }
-        td
-        {
-            height: 40px;
-        }
-        .nome
-        {
-            width: 80px;
-        }
-        a {
-            border-radius: 5px;
-            text-align: center;
-            padding: 10px;
-            background-color: deepskyblue;
-            color: white;
-            text-decoration: none;
-            transition-duration: 0.3s;
-        }
-         a:hover {
-                background-color: deeppink;
-                border-radius: 100%;
-         }
-        
-    </style>
 </head>
 <body>
     <p>
@@ -54,24 +22,25 @@
             </th>
             <th></th>
         </tr>
-    
-    @foreach (var item in Model) {
-    <tr>
-        <td class="nome">
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.ActionLink("Editar", "Edit", new { id = item.CategoriaId })
-        </td>
-        <td>
-            @Html.ActionLink("Detalhes", "Details", new { id = item.CategoriaId })
-        </td>
-        <td>
-            @Html.ActionLink("Deletar", "Delete", new { id = item.CategoriaId })
-        </td>
-    </tr>
-    }
-    
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="nome">
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.CategoriaId })
+                </td>
+                <td>
+                    @Html.ActionLink("Detalhes", "Details", new { id = item.CategoriaId })
+                </td>
+                <td>
+                    @Html.ActionLink("Deletar", "Delete", new { id = item.CategoriaId })
+                </td>
+            </tr>
+        }
+
     </table>
 </body>
 </html>
