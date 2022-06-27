@@ -4,6 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Fabricantes";
 }
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Message"]
+    </div>
+}
 <div class="panel panel-primary">
     <div class="panel-heading">
         Relação de FABRICANTES registrados
@@ -46,13 +52,13 @@
     </div>
 </div>
 @section styles{
-    <link href="@Url.Content("~/content/DataTables/css/dataTables.bootstrap.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/content/DataTables-1.10.2/css/dataTables.bootstrap.css")" rel="stylesheet" />
 }
 @section ScriptPage{
-    <script src="@Url.Content("~/scripts/DataTables/jquery.dataTables.js")"></script>
-    <script src="@Url.Content("~/scripts/DataTables/dataTables.bootstrap.js")"></script>
+    <script src="@Url.Content("~/scripts/DataTables-1.10.2/jquery.dataTables.js")"></script>
+    <script src="@Url.Content("~/scripts/DataTables-1.10.2/dataTables.bootstrap.js")"></script>
     <script type="text/javascript">
-    $(document).ready(function () {
+        $(document).ready(function () {
             $('.table').dataTable();
         });
     </script>
