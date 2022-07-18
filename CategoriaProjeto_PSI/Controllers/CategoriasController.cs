@@ -1,26 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using CategoriaProjeto_PSI.Context;
 using CategoriaProjeto_PSI.Models;
 
 namespace CategoriaProjeto_PSI.Controllers
 {
     public class CategoriasController : Controller
     {
-        private static IList<Categoria> categorias = new List<Categoria>()
+        /*private static IList<Categoria> categorias = new List<Categoria>()
         {
             new Categoria { CategoriaId = 1, Nome = "Camisa" },
             new Categoria { CategoriaId = 2, Nome = "Gorro" },
             new Categoria { CategoriaId = 3, Nome = "Chapeu" },
             new Categoria { CategoriaId = 4, Nome = "Casaco" },
             new Categoria { CategoriaId = 5, Nome = "Macacão" }
-        };
+        };*/
+
         // GET: Categorias
+        private EFContext context = new EFContext();
         public ActionResult Index()
         {
-            return View(categorias);
+            return View(context.Categorias.OrderBy(c => c.Nome));
         }
 
         //CREATE:
@@ -34,15 +39,24 @@ namespace CategoriaProjeto_PSI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Categoria categoria)
         {
-            categorias.Add(categoria);
-            categoria.CategoriaId = categorias.Select(m => m.CategoriaId).Max() + 1;
+            context.Categorias.Add(categoria);
+            context.SaveChanges();
             return RedirectToAction("Index");
         }
 
         //EDIT:
-        public ActionResult Edit(long id)
+        public ActionResult Edit(long? id)
         {
-            return View(categorias.Where(m => m.CategoriaId == id).First());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Categoria categoria = context.Categorias.Find(id);
+            if (categoria == null)
+            {
+                return HttpNotFound();
+            }
+            return View(categoria);
         }
 
         //EDIT POST:
@@ -50,29 +64,54 @@ namespace CategoriaProjeto_PSI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Categoria categoria)
         {
-            categorias.Remove(categorias.Where(c => c.CategoriaId == categoria.CategoriaId).First());
-            categorias.Add(categoria);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                context.Entry(categoria).State = EntityState.Modified;
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(categoria);
         }
 
         //DETAILS:
-        public ActionResult Details(long id)
+        public ActionResult Details(long? id)
         {
-            return View(categorias.Where(m => m.CategoriaId == id).First());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Categoria categoria = context.Categorias.Find(id);
+            if (categoria == null)
+            {
+                return HttpNotFound();
+            }
+            return View(categoria);
         }
 
         //DELETE:
-        public ActionResult Delete(long id)
+        public ActionResult Delete(long? id)
         {
-            return View(categorias.Where(m => m.CategoriaId == id).First());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Categoria categoria = context.Categorias.Find(id);
+            if (categoria == null)
+            {
+                return HttpNotFound();
+            }
+            return View(categoria);
         }
 
         //DELETE POST:
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Categoria categoria)
+        public ActionResult Delete(long id)
         {
-            categorias.Remove(categorias.Where(c => c.CategoriaId == categoria.CategoriaId).First());
+            Categoria categoria = context.Categorias.Find(id);
+            context.Categorias.Remove(categoria);
+            context.SaveChanges();
+            TempData["Message"] = "Fabricante " + categoria.Nome.ToUpper() + " foi removido";
             return RedirectToAction("Index");
         }
     }
